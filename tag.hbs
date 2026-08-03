@@ -1,0 +1,86 @@
+{{!< default}} <!-- TAG HEADER -->
+    <header class="tag-header" {{#if tag.accent_color}}style="background-color: {{tag.accent_color}};" {{/if}}>
+        {{#if tag.feature_image}}
+        <div class="tag-header-bg" style="background-image: url('{{tag.feature_image}}');"></div>
+        {{/if}}
+        <div class="tag-header-content">
+            <h1 class="tag-name">#{{tag.name}}</h1>
+
+            {{#if tag.description}}
+            <p class="tag-description">{{tag.description}}</p>
+            {{/if}}
+
+            <span class="tag-post-count">{{plural ../pagination.total empty="No posts" singular="% post" plural="%
+                posts"}}</span>
+        </div>
+    </header>
+
+    <!-- TAG POSTS -->
+    <section class="post-section tag-posts">
+        {{#if posts}}
+        <div class="post-grid">
+            {{#foreach posts}}
+            <article class="post-card {{post_class}}">
+                <a href="{{url}}" class="post-card-link">
+                    {{#if feature_image}}
+                    <div class="post-card-image" style="background-image: url('{{feature_image}}');"></div>
+                    {{else}}
+                    <div class="post-card-image post-card-no-image"></div>
+                    {{/if}}
+
+                    <div class="post-card-overlay"></div>
+
+                    <div class="post-card-content">
+                        {{#if tags}}
+                        <div class="post-card-tags">
+                            {{#foreach tags limit="2"}}
+                            <span class="post-card-tag" {{#if accent_color}}style="background-color: {{accent_color}};"
+                                {{/if}}>{{name}}</span>
+                            {{/foreach}}
+                        </div>
+                        {{/if}}
+                        <h2 class="post-card-title">{{title}}</h2>
+                        <p class="post-card-excerpt">{{excerpt words="12"}}</p>
+                    </div>
+                </a>
+            </article>
+            {{/foreach}}
+        </div>
+
+        {{pagination}}
+        {{else}}
+        <div class="no-posts">
+            <div class="no-posts-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </div>
+            <h3 class="no-posts-title">No posts with this tag yet</h3>
+            <p class="no-posts-message">Check back soon for new content!</p>
+        </div>
+        {{/if}}
+    </section>
+
+    <!-- RELATED TAGS -->
+    {{#get "tags" limit="8" filter="id:-{{tag.id}}" include="count.posts"}}
+    {{#if tags}}
+    <section class="related-tags">
+        <h3>Explore other topics</h3>
+        <div class="related-tags-list">
+            {{#foreach tags}}
+            {{#if count.posts}}
+            <a href="{{url}}" class="related-tag" {{#if accent_color}}style="border-color: {{accent_color}};" {{/if}}>
+                <span class="related-tag-name">{{name}}</span>
+                <span class="related-tag-count">({{count.posts}})</span>
+            </a>
+            {{/if}}
+            {{/foreach}}
+        </div>
+    </section>
+    {{/if}}
+    {{/get}}

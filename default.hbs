@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}">
+
+<head>
+    <meta charset="utf-8">
+    <title>{{meta_title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{ghost_head}}
+
+    <link rel="stylesheet" href="{{asset "css/default.css"}}">
+    <link rel="stylesheet" href="{{asset "css/index.css"}}">
+    <link rel="stylesheet" href="{{asset "css/post.css"}}">
+    <link rel="stylesheet" href="{{asset "css/page.css"}}">
+    <link rel="stylesheet" href="{{asset "css/author.css"}}">
+    <link rel="stylesheet" href="{{asset "css/tag.css"}}">
+    <link rel="stylesheet" href="{{asset " css/koenig.css"}}">
+
+</head>
+
+<body class="{{body_class}}">
+
+    <!-- MOBILE MENU TOGGLE BUTTON -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- MENU OVERLAY -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- LEFT VERTICAL NAVIGATION -->
+    <aside class="side-nav left" id="sideNav">
+        <div class="side-brand">
+            <button class="close-menu" id="closeMenu" aria-label="Close menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <a class="gh-head-logo{{#unless @site.logo}} no-image{{/unless}}" href="{{@site.url}}">
+                {{#if @site.logo}}
+                <img src="{{@site.logo}}" alt="{{@site.title}}">
+                {{else}}
+                {{@site.title}}
+                {{/if}}
+            </a>
+        </div>
+
+        {{navigation}}
+
+        <div class="side-nav-footer" style="padding: 0 20px; margin-top: auto;">
+            <a href="#/portal/signup" class="subscribe-btn"
+                style="display: block; width: 100%; margin: 0 0 12px; padding: 12px 16px; background: var(--color-primary); color: #fff; text-align: center; border-radius: var(--radius-md); font-weight: 600; text-decoration: none;">
+                Subscribe
+            </a>
+            <button class="gh-search" data-ghost-search style="width: 100%; margin: 0 0 20px;">
+                {{> "icons/search"}} Search
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="site-main with-side-nav">
+        {{{body}}}
+    </main>
+<!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-social" style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 16px;">
+                {{#if @site.facebook}}
+                <a href="{{@site.facebook}}" target="_blank"                rel="noopener" aria-label="Facebook" style="display:            inline-flex; width: 24px; height: 24px; color: #ffffff;">
+                    {{> "icons/facebook"}}
+                </a>
+                {{/if}}
+                {{#if @site.instagram}}
+                <a href="{{@site.instagram}}" target="_blank" rel="noopener" aria-label="Instagram" style="display: inline-flex; width: 24px; height: 24px; color: #ffffff;">
+                    {{> "icons/instagram"}}
+                </a>
+                {{/if}}
+                {{#if @site.linkedin}}
+                <a href="{{@site.linkedin}}" target="_blank" rel="noopener" aria-label="LinkedIn" style="display: inline-flex; width: 24px; height: 24px; color: #ffffff;">
+                    {{> "icons/linkedin"}}
+                </a>
+                {{/if}}
+            </div>
+            <p>© {{date format="YYYY"}} {{@site.title}}</p>
+        </div>
+    </footer>
+    <!-- FOOTER -->
+    {{!-- <footer class="site-footer">
+        <div class="footer-inner">
+            <p>© {{date format="YYYY"}} {{@site.title}}</p>
+        </div>
+    </footer> --}}
+
+    <script src="{{asset "js/main.js"}}" defer></script>
+    {{ghost_foot}}
+
+</body>
+
+</html>

@@ -1,0 +1,365 @@
+{{!< default}} <!-- HERO SECTION -->
+    <section class="hero {{#unless @site.cover_image}}hero-no-image{{/unless}}">
+        {{#if @site.cover_image}}
+        <div class="hero-bg" style="background-image: url('{{@site.cover_image}}');"></div>
+        {{/if}}
+
+        <div class="hero-content">
+            <h1 class="hero-title">{{@site.title}}</h1>
+
+            {{#if @site.description}}
+            <p class="hero-description">{{@site.description}}</p>
+            {{/if}}
+
+            <form class="hero-form" data-members-form="subscribe">
+                <div class="hero-form-inner">
+                    <input data-members-email type="email" placeholder="your@email.com" required
+                        aria-label="Email address">
+                    <button type="submit">Subscribe</button>
+                </div>
+                <p class="hero-form-error" data-members-error></p>
+            </form>
+        </div>
+    </section>
+
+    <!-- POST LIST -->
+    <section class="post-section">
+        <div class="section-header">
+            <h2 class="section-title">Recent</h2>
+            <a href="/all-posts/" class="view-more">View more →</a>
+        </div>
+
+        {{#if posts}}
+        <div class="post-grid">
+            {{#foreach posts limit="4"}}
+            <article class="post-card {{post_class}}">
+                <a href="{{url}}" class="post-card-link">
+                    {{#if feature_image}}
+                    <div class="post-card-image" style="background-image: url('{{feature_image}}');"></div>
+                    {{else}}
+                    <div class="post-card-image post-card-no-image"></div>
+                    {{/if}}
+
+                    <div class="post-card-overlay"></div>
+
+                    <div class="post-card-content">
+                        {{#if tags}}
+                        <div class="post-card-tags">
+                            {{#foreach tags limit="2"}}
+                            <span class="post-card-tag" {{#if accent_color}}style="background-color: {{accent_color}};"
+                                {{/if}}>{{name}}</span>
+                            {{/foreach}}
+                        </div>
+                        {{/if}}
+                        <h2 class="post-card-title">{{title}}</h2>
+                        <p class="post-card-excerpt">{{excerpt words="12"}}</p>
+                    </div>
+                </a>
+            </article>
+            {{/foreach}}
+        </div>
+        {{else}}
+        <div class="no-posts">
+            <div class="no-posts-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+            </div>
+            <h3 class="no-posts-title">No posts yet</h3>
+            <p class="no-posts-message">New content coming soon. Stay tuned!</p>
+        </div>
+        {{/if}}
+    </section>
+
+    <!-- TAG SECTION -->
+    {{#get "tags" include="count.posts" limit="100"}}
+    {{#if tags}}
+    <section class="tag-section">
+        <div class="tag-bar">
+            <h2 class="tag-bar-title">Read More</h2>
+
+            <div class="tag-bar-right">
+                <div class="tag-bar-chips" id="tagBarChips">
+                    {{#foreach tags limit="5"}}
+                    {{#if count.posts}}
+                    <button type="button" class="chip{{#if @first}} is-active{{/if}}" data-tag-slug="{{slug}}"
+                        data-tag-index="{{@index}}" data-tag-color="{{accent_color}}" {{#if
+                        accent_color}}style="{{#if @first}}background-color: {{accent_color}}; border-color: {{accent_color}}; color: #fff;{{else}}border-color: {{accent_color}}; color: {{accent_color}};{{/if}}"
+                        {{/if}}>
+                        {{name}} ({{count.posts}})
+                    </button>
+                    {{/if}}
+                    {{/foreach}}
+                </div>
+
+                <div class="chip-menu-wrapper" id="chipMenuWrapper">
+                    <button type="button" class="chip chip-dots" id="dotsBtn" aria-label="More tags"
+                        aria-expanded="false" aria-haspopup="menu">
+                        •••
+                    </button>
+                    <div class="chip-menu" id="chipMenu" role="menu" aria-hidden="true">
+                        <div class="chip-menu-list" id="chipMenuList">
+                            {{!-- All tags from position 6 onwards always in dropdown --}}
+                            {{#foreach tags from="6"}}
+                            {{#if count.posts}}
+                            <button type="button" class="chip-menu-item" role="menuitem" data-tag-slug="{{slug}}"
+                                data-tag-index="{{@index}}" data-tag-color="{{accent_color}}">
+                                {{name}} ({{count.posts}})
+                            </button>
+                            {{/if}}
+                            {{/foreach}}
+                        </div>
+                        <div class="chip-menu-divider"></div>
+                        <a href="/all-tags/" class="chip-menu-action" role="menuitem">View all →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Previews -->
+        <div class="tag-previews-container" id="tagPreviewsContainer">
+            {{#foreach tags}}
+            {{#if count.posts}}
+            <div class="tag-preview{{#if @first}} is-visible{{/if}}" data-tag-preview="{{slug}}">
+                {{#get "posts" filter="tag:{{slug}}" limit="8" include="tags"}}
+                {{#if posts}}
+                <div class="tag-preview-grid">
+                    {{#foreach posts}}
+                    <article class="post-card">
+                        <a href="{{url}}" class="post-card-link">
+                            {{#if feature_image}}
+                            <div class="post-card-image" style="background-image: url('{{feature_image}}');"></div>
+                            {{else}}
+                            <div class="post-card-image post-card-no-image"></div>
+                            {{/if}}
+                            <div class="post-card-overlay"></div>
+                            <div class="post-card-content">
+                                {{#if tags}}
+                                <div class="post-card-tags">
+                                    {{#foreach tags limit="2"}}
+                                    <span class="post-card-tag" {{#if
+                                        accent_color}}style="background-color: {{accent_color}};"
+                                        {{/if}}>{{name}}</span>
+                                    {{/foreach}}
+                                </div>
+                                {{/if}}
+                                <h2 class="post-card-title">{{title}}</h2>
+                                <p class="post-card-excerpt">{{excerpt words="12"}}</p>
+                            </div>
+                        </a>
+                    </article>
+                    {{/foreach}}
+                </div>
+                {{/if}}
+                {{/get}}
+
+                <div class="tag-preview-footer">
+                    <a href="{{url}}" class="tag-preview-link">View all {{name}} posts →</a>
+                </div>
+            </div>
+            {{/if}}
+            {{/foreach}}
+        </div>
+    </section>
+    {{else}}
+    <section class="tag-section">
+        <div class="tag-bar">
+            <h2 class="tag-bar-title">Read More</h2>
+        </div>
+        <div class="no-tags">
+            <p>No tags available yet</p>
+        </div>
+    </section>
+    {{/if}}
+    {{/get}}
+
+    <script>
+        (function () {
+            document.addEventListener('DOMContentLoaded', function () {
+                var chipMenuWrapper = document.getElementById('chipMenuWrapper');
+                var dotsBtn = document.getElementById('dotsBtn');
+                var chipMenu = document.getElementById('chipMenu');
+                var chipMenuList = document.getElementById('chipMenuList');
+
+                if (!dotsBtn || !chipMenu || !chipMenuList) return;
+
+                var allChips = document.querySelectorAll('.tag-bar-chips > .chip:not(.chip-dots)');
+                var dynamicItems = [];
+
+                // Get visible chip count based on viewport
+                function getVisibleChipCount() {
+                    if (window.innerWidth <= 767) return 2;      // Mobile: 2 chips
+                    if (window.innerWidth <= 1023) return 3;     // Tablet: 3 chips
+                    return 5;                                     // Desktop: 5 chips
+                }
+
+                // Populate dropdown with hidden chips
+                function populateDropdown() {
+                    // Remove previously added dynamic items
+                    dynamicItems.forEach(function (item) {
+                        if (item.parentNode) item.parentNode.removeChild(item);
+                    });
+                    dynamicItems = [];
+
+                    var visibleCount = getVisibleChipCount();
+                    var hasHiddenChips = false;
+
+                    // Add hidden chips to dropdown
+                    allChips.forEach(function (chip, index) {
+                        if (index >= visibleCount) {
+                            hasHiddenChips = true;
+                            var slug = chip.getAttribute('data-tag-slug');
+                            var color = chip.getAttribute('data-tag-color');
+                            var text = chip.textContent.trim();
+
+                            // Check if this item already exists in menu
+                            var existing = chipMenuList.querySelector('[data-tag-slug="' + slug + '"]');
+                            if (!existing) {
+                                var btn = document.createElement('button');
+                                btn.type = 'button';
+                                btn.className = 'chip-menu-item chip-menu-item-dynamic';
+                                btn.setAttribute('role', 'menuitem');
+                                btn.setAttribute('data-tag-slug', slug);
+                                btn.setAttribute('data-tag-color', color || '');
+                                btn.textContent = text;
+
+                                btn.addEventListener('click', function () {
+                                    selectTag(slug);
+                                });
+
+                                // Insert at the beginning of the list
+                                chipMenuList.insertBefore(btn, chipMenuList.firstChild);
+                                dynamicItems.push(btn);
+                            }
+                        }
+                    });
+
+                    // Update menu items reference
+                    updateMenuItemsReference();
+
+                    // Show/hide dots button based on whether there are any hidden items or static menu items
+                    var staticItems = chipMenuList.querySelectorAll('.chip-menu-item:not(.chip-menu-item-dynamic)');
+                    if (dynamicItems.length === 0 && staticItems.length === 0) {
+                        chipMenuWrapper.style.display = 'none';
+                    } else {
+                        chipMenuWrapper.style.display = 'inline-flex';
+                    }
+                }
+
+                var menuItems = [];
+                function updateMenuItemsReference() {
+                    menuItems = chipMenu.querySelectorAll('.chip-menu-item');
+                }
+
+                // Update chip styles
+                function updateChipStyles(activeSlug) {
+                    allChips.forEach(function (chip) {
+                        var color = chip.getAttribute('data-tag-color');
+                        var isActive = chip.getAttribute('data-tag-slug') === activeSlug;
+
+                        if (color) {
+                            if (isActive) {
+                                chip.style.backgroundColor = color;
+                                chip.style.borderColor = color;
+                                chip.style.color = '#ffffff';
+                            } else {
+                                chip.style.backgroundColor = 'transparent';
+                                chip.style.borderColor = color;
+                                chip.style.color = color;
+                            }
+                        }
+                    });
+
+                    menuItems.forEach(function (item) {
+                        item.classList.toggle('is-active', item.getAttribute('data-tag-slug') === activeSlug);
+                    });
+                }
+
+                // Select tag
+                function selectTag(slug) {
+                    allChips.forEach(function (c) { c.classList.remove('is-active'); });
+                    menuItems.forEach(function (c) { c.classList.remove('is-active'); });
+
+                    var mainChip = document.querySelector('.tag-bar-chips > [data-tag-slug="' + slug + '"]');
+                    var menuItem = chipMenu.querySelector('[data-tag-slug="' + slug + '"]');
+
+                    if (mainChip) mainChip.classList.add('is-active');
+                    if (menuItem) menuItem.classList.add('is-active');
+
+                    updateChipStyles(slug);
+
+                    document.querySelectorAll('.tag-preview').forEach(function (p) {
+                        p.classList.remove('is-visible');
+                    });
+                    var preview = document.querySelector('[data-tag-preview="' + slug + '"]');
+                    if (preview) preview.classList.add('is-visible');
+
+                    closeMenu();
+                }
+
+                function openMenu() {
+                    chipMenu.classList.add('is-open');
+                    chipMenu.setAttribute('aria-hidden', 'false');
+                    dotsBtn.setAttribute('aria-expanded', 'true');
+                }
+
+                function closeMenu() {
+                    chipMenu.classList.remove('is-open');
+                    chipMenu.setAttribute('aria-hidden', 'true');
+                    dotsBtn.setAttribute('aria-expanded', 'false');
+                }
+
+                // Chip clicks
+                allChips.forEach(function (chip) {
+                    chip.addEventListener('click', function () {
+                        selectTag(this.getAttribute('data-tag-slug'));
+                    });
+                });
+
+                // Dots button
+                dotsBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    chipMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+                });
+
+                // Close on outside click
+                document.addEventListener('click', function (e) {
+                    if (chipMenuWrapper && !chipMenuWrapper.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
+
+                // Close on Escape
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') closeMenu();
+                });
+
+                // Close on scroll (mobile)
+                var scrollTimeout;
+                window.addEventListener('scroll', function () {
+                    if (window.innerWidth <= 1023) {
+                        clearTimeout(scrollTimeout);
+                        scrollTimeout = setTimeout(closeMenu, 100);
+                    }
+                }, { passive: true });
+
+                // Handle resize
+                var resizeTimeout;
+                window.addEventListener('resize', function () {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(function () {
+                        populateDropdown();
+                        closeMenu();
+                    }, 150);
+                });
+
+                // Initial population
+                populateDropdown();
+            });
+        })();
+    </script>
